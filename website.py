@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_wtf import CSRFProtect
 from exts import db
 import config
 from apps.cms.views import bp as cms
@@ -8,7 +9,7 @@ from apps.front.views import bp as front
 app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
-
+CSRFProtect(app)
 app.register_blueprint(cms)
 app.register_blueprint(common)
 app.register_blueprint(front)

@@ -36,6 +36,7 @@
     <div class="container">
 
       <form class="form-signin" action="" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h2 class="form-signin-heading">请登录</h2>
         <label for="inputEmail" class="sr-only">邮箱</label>
         <input type="email" name="email" id="inputEmail" class="form-control" placeholder="邮箱" required autofocus>

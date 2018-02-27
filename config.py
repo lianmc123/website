@@ -20,7 +20,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 # ----------------- 分割线 ---------------------
 
 # -------------- session相关 -------------------
-SECRET_KEY = os.urandom(24)
+# SECRET_KEY = os.urandom(24)
+SECRET_KEY = "a6sd51as5d1asd66"
 PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 # ----------------- 分割线 ---------------------
 

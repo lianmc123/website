@@ -1,0 +1,41 @@
+{% extends "cms/cms_iframe_base.html" %}
+{% block css %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1 style="color: #1c2b36">这是个人信息页</h1>
+    <table class="table table-hover">
+        <tbody>
+        <tr>
+            <td>用户名:</td>
+            <td>{{ g.cms_user.username }}</td>
+        </tr>
+        <tr>
+            <td>邮箱:</td>
+            <td>{{ g.cms_user.email }}</td>
+        </tr>
+        <tr>
+            <td>角色:</td>
+            <td>暂未实现</td>
+        </tr>
+        <tr>
+            <td>权限:</td>
+            <td>暂未实现</td>
+        </tr>
+        <tr>
+            <td>加入时间:</td>
+            <td>{{ g.cms_user.join_time }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

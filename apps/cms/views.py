@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, views, request, redirect, url_for, session
+from flask import Blueprint, render_template, views, request, redirect, url_for, session, g
 from .forms import LoginForm
 from .models import CMSUser
 from .decorators import login_required
@@ -11,7 +11,22 @@ bp = Blueprint('cms', __name__, url_prefix='/cms')
 @bp.route('/')
 @login_required
 def index():
-    return '后台 index'
+    # 源码:http://www.17sucai.com/pins/21355.html
+    return render_template('cms/cms_base.html')
+
+@bp.route('/first/')
+def findex():
+    return render_template('cms/cms_index.html')
+
+@bp.route('/logout/')
+def logout():
+    session.pop(config.CMS_USER_ID)
+    return redirect(url_for('cms.login'))
+
+
+@bp.route('/profile/')
+def profile():
+    return render_template('cms/cms_profile.html')
 
 
 class LoginView(views.MethodView):
@@ -36,6 +51,15 @@ class LoginView(views.MethodView):
         else:
             error_msg = form.errors.popitem()[1][0]
             return self.get(message=error_msg)
+
+
+@bp.before_request
+def before_request():
+    if config.CMS_USER_ID in session:
+        user_id = session[config.CMS_USER_ID]
+        user = CMSUser.query.get(user_id)
+        if user:
+            g.cms_user = user
 
 
 bp.add_url_rule('/login/', view_func=LoginView.as_view('login'))

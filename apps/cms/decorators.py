@@ -12,4 +12,3 @@ def login_required(func):
         else:
             return redirect(url_for('cms.login'))
     return wrapper
-
