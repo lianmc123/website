@@ -15,11 +15,19 @@ $(function () {
                 'newpwd': newpwd_value,
                 'newpwd2': newpwd_value2
             },
-            'success':function (data) {
-
+            'success': function(data) {
+                if (data['code'] == 200){
+                    swalert.alertSuccessToast("修改成功");
+                    oldpwd.val("");
+                    newpwd.val("");
+                    newpwd2.val("");
+                }else{
+                    swalert.alertError(data['msg']);
+                }
+                console.log(data)
             },
             'fail':function (error) {
-                console.log(error)
+                swalert.alertNetworkError();
             }
         });
     });
