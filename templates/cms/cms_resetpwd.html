@@ -1,0 +1,42 @@
+{% extends "cms/cms_iframe_base.html" %}
+{% from "common/_macro.html" import static %}
+{% block css %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1 style="color: #1c2b36">这是修改密码页</h1>
+    <form class="form-inline">
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">旧密码</div>
+                    <input name="oldpwd" type="password" class="form-control" id="exampleInputAmount" placeholder="旧密码">
+                </div>
+            </div>
+
+        <div style="margin-top: 20px">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">新密码</div>
+                    <input name="newpwd" type="password" class="form-control" id="exampleInputAmount" placeholder="新密码">
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 20px;margin-bottom: 20px">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">确认新密码</div>
+                    <input name="newpwd2" type="password" class="form-control" id="exampleInputAmount" placeholder="确认新密码">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">确认修改</button>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ static("cms/js/resetpwd.js") }}"></script>
+
+{% endblock %}

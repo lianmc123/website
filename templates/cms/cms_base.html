@@ -82,10 +82,10 @@
                                 <a class="J_menuItem" href="{{ url_for('cms.profile') }}">个人信息</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="{{ url_for('cms.findex') }}">修改密码</a>
+                                <a class="J_menuItem" href="{{ url_for('cms.resetpwd') }}">修改密码</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="#">修改邮箱</a>
+                                <a class="J_menuItem" href="{{ url_for('cms.resetemail') }}">修改邮箱</a>
                             </li>
 {#                            <li>#}
 {#                                <a class="J_menuItem" href="graph_rickshaw.html">Rickshaw</a>#}
@@ -396,5 +396,6 @@
     <script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
     <script type="text/javascript" src="{{ static("cms/js/index.js") }}"></script>
     <script src="{{ static("cms/js/hAdmin.js") }}"></script>
+
 </body>
 </html>

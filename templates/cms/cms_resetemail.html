@@ -1,0 +1,124 @@
+{% extends "cms/cms_iframe_base.html" %}
+{% block css %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1 style="color: #1c2b36">这是修改邮箱页</h1>
+    <button id="btn01">点我弹出</button>
+    <button id="btn02">点我弹出</button>
+    <button id="btn03">点我弹出</button>
+    <button id="btn04">点我弹出</button>
+    <button id="btn05">点我弹出</button>
+    <button id="btn06">点我弹出</button>
+    <button id="btn07">点我弹出</button>
+    <button id="btn08">点我弹出</button>
+
+</body>
+</html>
+{% endblock %}
+
+{% block js %}
+    <script>
+     $("#btn01").click(function(){
+         swal("这是一条消息！");
+     });
+     $("#btn02").click(function(){
+         swal({
+            title:'你确定删除吗？',
+            text:'一旦删除，将无法恢复！',
+            type:'warning',
+            showCancelButton:true,
+            confirmButtonColor:'#DD6B55',
+            confirmButtonText:'确定删除！',
+            closeOnConfirm:false
+         },
+         function(){
+            swal("删除","您的文件已经删除","success");
+         }
+         );
+     });
+     $("#btn03").click(function(){
+        swal({
+            title:'你确定删除吗？',
+            text:'一旦删除，将无法恢复！',
+            type:'warning',
+            showCancelButton:true,
+            confirmButtonColor:'#DD6B55',
+            confirmButtonText:'确定删除！',
+            cancelButtonText:'取消操作！',
+            closeOnConfirm:false,
+            closeOnCancel:false
+        },
+        function(isConfirm){
+            if(isConfirm){
+                swal("删除！","您的文件已经被删除！",'success');
+            }else{
+                swal('取消！',"您的文件是依然存在！",'error');
+            }
+        }
+        )
+     });
+      $("#btn04").click(function(){
+        swal({
+            title:'Sweet!',
+            text:'送你一张图片',
+            imageUrl:'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=959939957,276541619&fm=27&gp=0.jpg'
+        });
+         });
+      $("#btn05").click(function(){
+        swal({
+            title:"<h1 style='font-size:16px'>此处可以插入html</h1>",
+            text:'我是<span style="color:#F8BB86">文字内容</span>',
+            html:true
+        })
+      });
+      $("#btn06").click(function(){
+        swal({
+            title:'自动关闭弹窗',
+            text:'设置弹窗在2秒后关闭',
+            timer:2000,
+            showConfirmButton:false
+        });
+      });
+      $("#btn07").click(function(){
+        swal({
+            title:'获取输入框中的内容',
+            text:'写入一些有趣的东西吧：',
+            type:'input',
+            showCancelButton:true,
+            closeOnConfirm:false,
+            confirmButtonText:'确定',
+            cancelButtonText:'取消',
+            animation:'slide-from-top',
+            inputPlaceholder:'请输入一些内容'
+        },
+        function(inputValue){
+           if(inputValue==false) return false;
+           if(inputValue==''){
+            swal.showInputError('你必须写入一些东西');
+            return false;
+           }
+           swal('非常好','您输入的内容是：'+inputValue,'success');
+        }
+        );
+      });
+      $("#btn08").click(function(){
+        swal({
+        title:'ajax请求例子',
+        text:'提交ajax请求',
+        type:'info',
+        showCancelButton:true,
+        closeOnConfirm:false,
+        showLoaderOnConfirm:true
+    },
+    function(){
+        setTimeout(function(){
+            swal("ajax请求完成");
+        },2000);
+       }
+    );
+      });
+    </script>
+{% endblock %}
