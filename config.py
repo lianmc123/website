@@ -25,7 +25,18 @@ SECRET_KEY = "a6sd51as5d1asd66"
 PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 # ----------------- 分割线 ---------------------
 
-# ----------------- 常量 ---------------------
+# ----------------- 常量 -----------------------
 CMS_USER_ID = "ASDGFSDF"
 # ----------------- 分割线 ---------------------
 
+# ----------------- 邮箱 -----------------------
+
+MAIL_SERVER = "smtp.126.com"
+MAIL_PORT = 25
+MAIL_USE_TLS = True
+MAIL_USERNAME = "q135025@126.com"
+MAIL_PASSWORD = "bnmbnm123123"
+MAIL_DEFAULT_SENDER = "q135025@126.com"
+MAIL_DEBUG = False
+
+# ----------------- 分割线 ---------------------

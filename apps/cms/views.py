@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, views, request, redirect, url_for, session, g, jsonify
-from .forms import LoginForm, ResetPwdForm
+from .forms import LoginForm, ResetPwdForm, ResetEmailForm
 from .models import CMSUser
 from .decorators import login_required
 import config
-from exts import db
-from utils import restful
+from exts import db, mail
+from utils import restful, web_cache
+from flask_mail import Message
+import string
+import random
 
 # bp = Blueprint('cms', __name__, subdomain='cms')
 bp = Blueprint('cms', __name__, url_prefix='/cms')
@@ -82,12 +85,43 @@ class ResetPwdView(views.MethodView):
 
 
 class ResetEmailView(views.MethodView):
+    decorators = [login_required]
+
     @login_required
     def get(self):
         return render_template('cms/cms_resetemail.html')
 
     def post(self):
-        pass
+        form = ResetEmailForm(request.form)
+        if form.validate():
+            user = g.cms_user
+            user.email = form.email.data
+            db.session.commit()
+            # web_cache.Memcache().set(form.email.data, "asd.")
+            web_cache.RedisCache().set(form.email.data, "asd.")
+            return restful.success()
+        else:
+            return restful.params_error(form.error_msg())
+
+
+@bp.route('/email_captcha/')
+@login_required
+def email_captcha():
+    email = request.args.get('email')
+    if not email:
+        return restful.params_error("请传递正确的邮箱")
+    source = list(string.ascii_letters)
+    source.extend(map(lambda x: str(x), range(0, 10)))
+    captcha = "".join(random.sample(source, 4))
+    message = Message(subject='验证码', recipients=[email],
+                      body="邮箱内容: %s(30分钟有效)" % captcha)
+    try:
+        mail.send(message)
+        # web_cache.Memcache().set(email, captcha)
+        web_cache.RedisCache().set(email, captcha)
+    except Exception as ex:
+        return restful.server_error("出错了")
+    return restful.success()
 
 
 @bp.before_request

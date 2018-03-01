@@ -8,6 +8,7 @@ cryptography==2.1.4
 DateTime==4.2
 Django==2.0.1
 Flask==0.12.2
+Flask-Mail==0.9.1
 Flask-Migrate==2.1.1
 Flask-RESTful==0.3.6
 Flask-Script==2.0.6
@@ -23,7 +24,9 @@ PyMySQL==0.8.0
 pyOpenSSL==17.5.0
 python-dateutil==2.6.1
 python-editor==1.0.3
+python-memcached==1.59
 pytz==2017.3
+redis==2.10.6
 six==1.11.0
 SQLAlchemy==1.2.0
 Werkzeug==0.14.1
