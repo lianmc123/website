@@ -18,11 +18,23 @@
         </tr>
         <tr>
             <td>角色:</td>
-            <td>暂未实现</td>
+            <td>
+                {% for role in g.cms_user.roles %}
+                    <span>{{ role.name }}</span>
+                    {% if not loop.last %}
+                        ,
+                    {% endif %}
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td>权限:</td>
-            <td>暂未实现</td>
+            <td>
+                {% for role in g.cms_user.roles %}
+                    <div>{{ role.desc }}</div>
+                {% endfor %}
+
+            </td>
         </tr>
         <tr>
             <td>加入时间:</td>

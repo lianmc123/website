@@ -1,7 +1,7 @@
 from .views import bp
 import config
 from flask import session, g, redirect, url_for
-from .models import CMSUser
+from .models import CMSUser, CMSPermission
 
 
 @bp.before_request
@@ -12,6 +12,6 @@ def before_request():
         if user:
             g.cms_user = user
 
-@bp.app_errorhandler
-def app_errorhandler():
-    return redirect()
+@bp.context_processor
+def cms_context_processor():
+    return {'CMSPermission': CMSPermission}

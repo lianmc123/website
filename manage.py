@@ -3,6 +3,7 @@ from website import app
 from flask_migrate import Migrate, MigrateCommand
 from exts import db
 from apps.cms import models as cms_models
+from apps.front import models as front_models
 
 manager = Manager(app)
 Migrate(app, db)
@@ -60,6 +61,15 @@ def test_permission():
         print("有权限")
     else:
         print("没有权限")
+
+
+@manager.option('-t', "--telephone", dest="telephone")
+@manager.option('-u', "--username", dest="username")
+@manager.option('-p', "--password", dest="password")
+def create_front_user(telephone, username, password):
+    front_user = front_models.FrontUser(telephone=telephone, username=username, password=password)
+    db.session.add(front_user)
+    db.session.commit()
 
 
 if __name__ == '__main__':

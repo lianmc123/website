@@ -33,7 +33,10 @@
           <ul class="nav navbar-nav navbar-right">
 {#            <li><a href="#">Dashboard</a></li>#}
 {#            <li><a href="#">Settings</a></li>#}
-            <li><a href="#">{{ g.cms_user.username }}<span>[超级管理员]</span></a></li>
+            <li><a href="{{ url_for("cms.profile") }}" id="user_profile">{{ g.cms_user.username }}<span>[{% for role in g.cms_user.roles %}
+                {{ role.name }}
+            {% endfor %}]
+            </span></a></li>
             <li><a href="{{ url_for('cms.logout') }}">注销</a></li>
           </ul>
 {#          <form class="navbar-form navbar-right">#}
@@ -105,8 +108,9 @@
 {#                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">#}
 {#                        <span class="ng-scope">分类</span>#}
 {#                    </li>#}
+                    {% if g.cms_user.has_permission(CMSPermission.POSTER) %}
                     <li>
-                        <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">帖子管理 </span>
+                        <a href="{{ url_for("cms.posts") }}" class="J_menuItem"><i class="fa fa-envelope"></i> <span class="nav-label">帖子管理 </span>
 {#                            <span class="label label-warning pull-right">16</span>#}
                         </a>
 {#                        <ul class="nav nav-second-level collapse">#}
@@ -118,8 +122,10 @@
 {#                            </li>#}
 {#                        </ul>#}
                     </li>
+                    {% endif %}
+                    {% if g.cms_user.has_permission(CMSPermission.COMMENTER) %}
                     <li>
-                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">评论管理</span><span
+                        <a href="{{ url_for("cms.comments") }}" class="J_menuItem"><i class="fa fa-edit"></i> <span class="nav-label">评论管理</span><span
                                 class="fa"></span></a>
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="form_basic.html">基本表单</a>#}
@@ -156,8 +162,10 @@
 {#                            </li>#}
 {#                        </ul>#}
                     </li>
+                    {% endif %}
+                    {% if g.cms_user.has_permission(CMSPermission.BOARDER) %}
                     <li>
-                        <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">板块管理</span><span
+                        <a href="{{ url_for("cms.boards") }}" class="J_menuItem"><i class="fa fa-desktop"></i> <span class="nav-label">板块管理</span><span
                                 class="fa"></span></a>
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="contacts.html">联系人</a>#}
@@ -246,12 +254,14 @@
 {#                            </li>#}
 {#                        </ul>#}
                     </li>
+                    {% endif %}
                     <li class="line dk"></li>
 {#                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">#}
 {#                        <span class="ng-scope">分类</span>#}
 {#                    </li>#}
+                    {% if g.cms_user.has_permission(CMSPermission.FRONTUSER) %}
                     <li>
-                        <a href="#"><i class="fa fa-flask"></i> <span class="nav-label">用户管理</span><span
+                        <a href="{{ url_for("cms.fusers") }}" class="J_menuItem"><i class="fa fa-flask"></i> <span class="nav-label">用户管理</span><span
                                 class="fa"></span></a>
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="typography.html">排版</a>#}
@@ -324,9 +334,10 @@
 {#                            </li>#}
 {#                        </ul>#}
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-table"></i> <span class="nav-label">组管理</span><span
-                                class="fa"></span></a>
+                    {% endif %}
+{#                    <li>#}
+{#                        <a href="#"><i class="fa fa-table"></i> <span class="nav-label">组管理</span><span#}
+{#                                class="fa"></span></a>#}
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="table_basic.html">基本表格</a>#}
 {#                            </li>#}
@@ -340,13 +351,14 @@
 {#                                <span class="label label-danger pull-right">推荐</span></a>#}
 {#                            </li>#}
 {#                        </ul>#}
-                    </li>
+{#                    </li>#}
                     <li class="line dk"></li>
 {#                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">#}
 {#                        <span class="ng-scope">分类</span>#}
 {#                    </li>#}
+                    {% if g.cms_user.has_permission(CMSPermission.CMSUSER) %}
                     <li>
-                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">CMS用户管理</span><span
+                        <a href="{{ url_for("cms.cusers") }}" class="J_menuItem"><i class="fa fa-picture-o"></i> <span class="nav-label">CMS用户管理</span><span
                                 class="fa"></span></a>
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="basic_gallery.html">基本图库</a>#}
@@ -357,17 +369,20 @@
 {#                            </li>#}
 {#                        </ul>#}
                     </li>
+                    {% endif %}
 {#                    <li>#}
 {#                        <a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">CSS动画</span></a>#}
 {#                    </li>#}
+                    {% if g.cms_user.has_permission(CMSPermission.ADMINER) %}
                     <li>
-                        <a href="#"><i class="fa fa-cutlery"></i> <span class="nav-label">CMS组管理 </span><span
+                        <a href="{{ url_for("cms.croles") }}" class="J_menuItem"><i class="fa fa-cutlery"></i> <span class="nav-label">CMS组管理 </span><span
                                 class="fa"></span></a>
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="form_builder.html">表单构建器</a>#}
 {#                            </li>#}
 {#                        </ul>#}
                     </li>
+                    {% endif %}
 
                 </ul>
             </div>
