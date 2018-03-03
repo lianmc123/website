@@ -30,7 +30,6 @@ CMS_USER_ID = "ASDGFSDF"
 # ----------------- 分割线 ---------------------
 
 # ----------------- 邮箱 -----------------------
-
 MAIL_SERVER = "smtp.126.com"
 MAIL_PORT = 25
 MAIL_USE_TLS = True
@@ -38,5 +37,16 @@ MAIL_USERNAME = "q135025@126.com"
 MAIL_PASSWORD = "bnmbnm123123"
 MAIL_DEFAULT_SENDER = "q135025@126.com"
 MAIL_DEBUG = False
+# ----------------- 分割线 ---------------------
 
+# ----------------- 阿里大于 -----------------------
+ALIDAYU_APP_KEY = 'LTAIfbaYxJm4sWQZ'
+ALIDAYU_APP_SECRET = 'K8q1CPvkFNYeRuMqIMtlQUfBDWBJNv'
+# ALIDAYU_APP_SECRET = 'K8q1CPvkFNYeRuMqIMtlQUfBDWBJNn'
+ALIDAYU_SIGN_NAME = '易秀米'
+ALIDAYU_TEMPLATE_CODE = 'SMS_126635198'
+# ----------------- 分割线 ---------------------
+
+# ----------------- 短信验证码 -----------------------
+SMS_SALT = "sodhfoaw201rkqwuhro"
 # ----------------- 分割线 ---------------------
