@@ -1,31 +1,14 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, make_response
+from utils.captcha import Captcha
+from io import BytesIO
 from exts import aliyunsms
 from utils import restful
-from utils.captcha import Captcha
 import random
 from .forms import SMSCaptchaForm
+from utils import web_cache
 
 bp = Blueprint('common', __name__, url_prefix='/c')
 
-
-# @bp.route('/sms_captcha/', method=["POST"])
-# def sms_captcha():
-#     telephone = request.args.get('telephone')
-#     if not telephone:
-#         return restful.params_error(msg="未收到手机号码")
-#     # captcha = Captcha.gene_text(number=4)
-#     captcha = random.randint(100000, 999999)
-#     # if alidayu.send_sms(telephone, code=captcha):
-#     #     return restful.success()
-#     # else:
-#     #     return restful.params_error(msg="发送失败")
-#     # result = aliyunsms.sms.send_single(telephone, aliyunsms.ALISMS_SIGN, aliyunsms.ALISMS_TPL_REGISTER,
-#     #                                    {"code": captcha})
-#     result = aliyunsms.send_single(telephone, {"code": captcha})
-#     if result:
-#         return restful.success()
-#     else:
-#         return restful.params_error(msg="发送失败")
 
 @bp.route('/sms_captcha/', methods=["POST"])
 def sms_captcha():
@@ -35,8 +18,21 @@ def sms_captcha():
         captcha = random.randint(100000, 999999)
         result = aliyunsms.send_single(telephone, {"code": captcha})
         if result:
+            web_cache.RedisCache().set(telephone, captcha)
             return restful.success()
         else:
             return restful.params_error(msg="发送失败")
     else:
         return restful.params_error(msg="参数错误")
+
+
+@bp.route('/captcha/')
+def graph_captcha():
+    text, image = Captcha.gene_graph_captcha()
+    web_cache.RedisCache().set(text.lower(), text.lower())
+    out = BytesIO()
+    image.save(out, 'png')
+    out.seek(0)
+    resp = make_response(out.read())
+    resp.content_type = 'image/png'
+    return resp
