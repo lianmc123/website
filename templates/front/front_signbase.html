@@ -1,0 +1,58 @@
+{% from "common/_macro.html" import static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3f3f3;
+        }
+
+        .outer-box {
+            width: 850px;
+            background-color: #fff;
+            margin: 50px auto;
+            overflow: hidden;
+        }
+
+        .logo-box {
+            text-align: center;
+            padding-top: 40px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #14beef;
+        }
+    </style>
+    {% block css %}{% endblock %}
+</head>
+<body>
+<div class="outer-box">
+    <div class="logo-box">
+        <a href="/">
+            <img src="{{ static("common/images/logo.jpeg") }}" width="80px" height="80px" style="border-radius: 30px"
+                 alt="首页">
+        </a>
+    </div>
+    <h2 class="page-title">{% block h2_block %}{% endblock %}</h2>
+    {% block form %}
+
+    {% endblock %}
+    <span id="return-to-span" style="display: none">{{ return_to }}</span>
+</div>
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="{{ static("common/js/csrfajax.js") }}"></script>
+<script src="{{ static("common/js/sweetalert_pack.js") }}"></script>
+
+{% block js %}
+
+{% endblock %}
+</body>
+</html>

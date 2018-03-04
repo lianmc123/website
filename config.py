@@ -27,6 +27,7 @@ PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 
 # ----------------- 常量 -----------------------
 CMS_USER_ID = "ASDGFSDF"
+FRONT_USER_ID = 'oqerhfoasf'
 # ----------------- 分割线 ---------------------
 
 # ----------------- 邮箱 -----------------------

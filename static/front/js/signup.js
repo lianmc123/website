@@ -9,25 +9,32 @@ $(function () {
         event.preventDefault();
         var telephone = $("input[name=telephone]").val();
         var sms_captchaE = $("input[name=sms_captcha]");
-        var sms_captcha = sms_captchaE.val()
+        var sms_captcha = sms_captchaE.val();
         var username = $("input[name=username]").val();
-        var password = $("input[name=password]").val();
         var password1 = $("input[name=password1]").val();
+        var password2 = $("input[name=password2]").val();
         var graph_captchaE = $("input[name=graph_captcha]");
-        var graph_captcha = graph_captchaE.val()
+        var graph_captcha = graph_captchaE.val();
         csrfajax.post({
             'url':'/signup/',
             'data':{
                'telephone':telephone,
                'sms_captcha':sms_captcha,
                'username':username,
-               'password':password,
                'password1':password1,
+               'password2':password2,
                'graph_captcha':graph_captcha
             },
             'success':function (data) {
                 if(data['code'] == 200){
-                    swalert.alertSuccessToast("注册成功")
+                    swalert.alertSuccess("注册成功", function (event) {
+                        var return_to = $("#return-to-span").text();
+                        if (return_to){
+                            window.location = return_to;
+                        }else {
+                            window.location = '/';
+                        }
+                    })
                 }else {
                     swalert.alertInfo(data['msg'])
                 }

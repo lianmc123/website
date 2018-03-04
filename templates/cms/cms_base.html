@@ -108,6 +108,19 @@
 {#                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">#}
 {#                        <span class="ng-scope">分类</span>#}
 {#                    </li>#}
+                    <li>
+                        <a href="{{ url_for("cms.banners") }}" class="J_menuItem"><i class="fa fa-envelope"></i> <span class="nav-label">Banner管理 </span>
+{#                            <span class="label label-warning pull-right">16</span>#}
+                        </a>
+{#                        <ul class="nav nav-second-level collapse">#}
+{#                            <li><a class="J_menuItem" href="mailbox.html">收件箱</a>#}
+{#                            </li>#}
+{#                            <li><a class="J_menuItem" href="mail_detail.html">查看邮件</a>#}
+{#                            </li>#}
+{#                            <li><a class="J_menuItem" href="mail_compose.html">写信</a>#}
+{#                            </li>#}
+{#                        </ul>#}
+                    </li>
                     {% if g.cms_user.has_permission(CMSPermission.POSTER) %}
                     <li>
                         <a href="{{ url_for("cms.posts") }}" class="J_menuItem"><i class="fa fa-envelope"></i> <span class="nav-label">帖子管理 </span>

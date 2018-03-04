@@ -79,6 +79,11 @@ def cusers():
 def croles():
     return render_template('cms/cms_croles.html')
 
+@bp.route('/banners/')
+@login_required
+def banners():
+    return render_template('cms/cms_banners.html')
+
 
 class LoginView(views.MethodView):
     def get(self, message=None):

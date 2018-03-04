@@ -1,0 +1,50 @@
+{% extends "front/front_signbase.html" %}
+{% from "common/_macro.html" import static %}
+{% block title -%}
+登录
+{%- endblock %}
+{% block css %}
+    <style>
+        .form-box {
+            width: 300px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+    </style>
+{% endblock %}
+{% block h2_block -%}
+登录
+{%- endblock %}
+{% block form %}
+    <div class="form-box">
+        <div class="form-group">
+            <div class="input-group" style="width: 300px">
+                <input type="text" class="form-control" style="border-radius: 4px" placeholder="手机号码" name="telephone">
+            </div>
+            <div class="input-group" style="margin-top: 15px; width: 300px">
+                <input type="password" class="form-control" style="border-radius: 4px" placeholder="密码" name="password">
+            </div>
+{#            <div class="input-group" style="margin-top: 15px; width: 300px">#}
+                <div class="checkbox" style="padding-left: 20px">
+                    <lable>
+                        <input type="checkbox" name="remember" value="1">
+                        <span style="margin-left: 5px">记住我</span>
+                    </lable>
+{#                </div>#}
+                </div>
+            <div class="input-group" style="margin-top: 15px; width: 300px; ">
+                <button type="submit" class="btn btn-primary" id="submit-btn" style="text-align: center; width: 300px">
+                    立即登录
+                </button>
+            </div>
+            <div class="input-group" style="margin-top: 15px; width: 300px; margin-bottom: 30px">
+                <a href="{{ url_for("front.signup") }}" class="signup-link">前往注册</a>
+                <a href="#" class="resetpwd-link" style="float: right">找回密码</a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ static("front/js/signin.js") }}"></script>
+{% endblock %}
