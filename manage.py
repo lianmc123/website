@@ -4,6 +4,7 @@ from flask_migrate import Migrate, MigrateCommand
 from exts import db
 from apps.cms import models as cms_models
 from apps.front import models as front_models
+from apps.common import models as common_models
 
 manager = Manager(app)
 Migrate(app, db)

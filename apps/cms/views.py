@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, views, request, redirect, url_for, session, g, jsonify
-from .forms import LoginForm, ResetPwdForm, ResetEmailForm
+from .forms import LoginForm, ResetPwdForm, ResetEmailForm, AddBannerForm, UpdateBannerForm
 from .models import CMSUser, CMSPermission
+from apps.common.models import BannerModel
 from .decorators import login_required, permission_required
 import config
 from exts import db, mail
@@ -79,10 +80,13 @@ def cusers():
 def croles():
     return render_template('cms/cms_croles.html')
 
+
 @bp.route('/banners/')
 @login_required
 def banners():
-    return render_template('cms/cms_banners.html')
+    # http://www.htmleaf.com/jQuery/Buttons-Icons/201502051331.html  # bootstrap 开关
+    banners = BannerModel.query.all()
+    return render_template('cms/cms_banners.html', banners=banners)
 
 
 class LoginView(views.MethodView):
@@ -149,6 +153,83 @@ class ResetEmailView(views.MethodView):
             return restful.success()
         else:
             return restful.params_error(form.error_msg())
+
+
+@bp.route('/abanner/', methods=['POST'])
+@login_required
+def abanner():
+    form = AddBannerForm(request.form)
+    if form.validate():
+        name = form.name.data
+        image_url = form.image_url.data
+        link_url = form.link_url.data
+        priority = form.priority.data
+        banner = BannerModel(name=name, image_url=image_url, link_url=link_url, priority=priority)
+        db.session.add(banner)
+        db.session.commit()
+        return restful.success()
+    else:
+        return restful.params_error(form.error_msg())
+
+
+@bp.route('/ubanner/', methods=['POST'])
+@login_required
+def ubanner():
+    form = UpdateBannerForm(request.form)
+    if form.validate():
+        banner_id = form.banner_id.data
+        name = form.name.data
+        image_url = form.image_url.data
+        link_url = form.link_url.data
+        priority = form.priority.data
+        banner = BannerModel.query.get(banner_id)
+        if banner:
+            banner.name = name
+            banner.image_url = image_url
+            banner.link_url = link_url
+            banner.priority = priority
+            db.session.commit()
+            return restful.success()
+        else:
+            return restful.params_error("未找到Banner")
+    else:
+        return restful.params_error(form.error_msg())
+
+
+@bp.route('/dbanner/', methods=['POST'])
+@login_required
+def dbanner():
+    banner_id = request.form.get('banner_id')
+    if not banner_id:
+        return restful.params_error("Banner_id不存在")
+    banner = BannerModel.query.get(banner_id)
+    if banner:
+        # db.session.delete(banner)
+        # db.session.commit()
+        print("删除成功")
+        return restful.success()
+    else:
+        restful.params_error("Banner未找到")
+
+
+@bp.route('/sbanner/', methods=['POST'])
+@login_required
+def sbanner():
+    banner_id = request.form.get('banner_id')
+    print(banner_id)
+    if not banner_id:
+        return restful.params_error("Banner_id不存在")
+    banner = BannerModel.query.get(banner_id)
+    if banner:
+        banner_show = banner.is_show
+        if banner_show == 0:
+            banner.is_show = 1
+        else:
+            banner.is_show = 0
+        db.session.commit()
+        return restful.success()
+    else:
+        restful.params_error("Banner未找到")
 
 
 @bp.route('/email_captcha/')

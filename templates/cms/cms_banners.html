@@ -1,13 +1,16 @@
 {% extends "cms/cms_iframe_base.html" %}
+{% from "common/_macro.html" import static %}
 {% block css %}
-
+    <link href="https://cdn.bootcss.com/bootstrap-switch/4.0.0-alpha.1/css/bootstrap-switch.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
     <h1 style="color: #1c2b36">这是Banner管理页</h1>
     <div class="topbox">
-        <button class="btn btn-danger" style="float: right;margin-bottom: 15px">添加Banner页</button>
+        <button class="btn btn-danger" style="float: right;margin-bottom: 15px" data-toggle="modal"
+                data-target="#myModal">添加Banner页
+        </button>
     </div>
     <table class="table table-bordered">
         <thead>
@@ -17,22 +20,96 @@
             <th>跳转链接</th>
             <th>优先级</th>
             <th>创建时间</th>
+            <th>显示</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        {% for banner in banners %}
+            <tr data-id="{{ banner.id }}" data-name="{{ banner.name }}" data-image-url="{{ banner.image_url }}" data-link-url="{{ banner.link_url }}" data-priority="{{ banner.priority }}">
+                <td>{{ banner.name }}</td>
+                <td><a href="{{ banner.image_url }}" target="_blank">{{ banner.image_url }}</a></td>
+                <td><a href="{{ banner.link_url }}" target="_blank">{{ banner.link_url }}</a></td>
+                <td>{{ banner.priority }}</td>
+                <td>{{ banner.create_time }}</td>
+                {% if banner.is_show is eq(1) %}
+                    <td>
+{#                        <input type="checkbox"/>#}
+                        <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关" checked data-on-color="primary"  	data-off-color="danger">
+                    </td>
+                {% else %}
+                    <td>
+{#                        <input type="checkbox" checked/>#}
+                        <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关" data-on-color="primary"  	data-off-color="danger">
+                    </td>
+                {% endif %}
+                <td>
+                    <button class="btn btn-default btn-sm edit-btn">编辑</button>
+                    <button class="btn btn-danger btn-sm delete-btn">删除</button>
+                </td>
+            </tr>
+        {% endfor %}
+
         </tbody>
     </table>
+    {#    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">#}
+    {#  Launch demo modal#}
+    {#</button>#}
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加Banner</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">名称:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" placeholder="Banner名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">图片:</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="image-url" placeholder="Banner图片">
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-info" style="margin-left: 30px">添加图片</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">跳转:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="link-url" placeholder="Banner跳转链接">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">权重:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="priority" placeholder="优先级">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="cancel-btn" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="save-banner-btn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
+    <script src="https://cdn.bootcss.com/bootstrap-switch/4.0.0-alpha.1/js/bootstrap-switch.min.js"></script>
+    <script>
+    $("input[name=my-checkbox]").bootstrapSwitch();
+    </script>
+    <script src="{{ static("cms/js/banners.js") }}"></script>
 
 {% endblock %}

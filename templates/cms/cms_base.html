@@ -45,7 +45,8 @@
         </div>
       </div>
     </nav>
-    <nav class="navbar-default navbar-static-side" style="width: 25%; height: 100%; float: left" role="navigation">
+    <div style="width: 100%; height: 100%; position: relative;">
+    <nav class="navbar-default navbar-static-side" style="width: 200px; height: 100%; float: left; position: absolute" role="navigation">
         <div class="nav-close"><i class="fa fa-times-circle"></i>
         </div>
         <div class="slimScrollDiv" style="position: relative; width: auto; height: 100%;">
@@ -371,7 +372,7 @@
 {#                    </li>#}
                     {% if g.cms_user.has_permission(CMSPermission.CMSUSER) %}
                     <li>
-                        <a href="{{ url_for("cms.cusers") }}" class="J_menuItem"><i class="fa fa-picture-o"></i> <span class="nav-label">CMS用户管理</span><span
+                        <a href="{{ url_for("cms.cusers") }}" class="J_menuItem"><i class="fa fa-picture-o"></i> <span class="nav-label">后台用户管理</span><span
                                 class="fa"></span></a>
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="basic_gallery.html">基本图库</a>#}
@@ -388,7 +389,7 @@
 {#                    </li>#}
                     {% if g.cms_user.has_permission(CMSPermission.ADMINER) %}
                     <li>
-                        <a href="{{ url_for("cms.croles") }}" class="J_menuItem"><i class="fa fa-cutlery"></i> <span class="nav-label">CMS组管理 </span><span
+                        <a href="{{ url_for("cms.croles") }}" class="J_menuItem"><i class="fa fa-cutlery"></i> <span class="nav-label">后台组管理 </span><span
                                 class="fa"></span></a>
 {#                        <ul class="nav nav-second-level collapse">#}
 {#                            <li><a class="J_menuItem" href="form_builder.html">表单构建器</a>#}
@@ -411,10 +412,11 @@
 {#    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>#}
 {#    <script src="js/plugins/layer/layer.min.js"></script>#}
 {#    <div id="page-wrapper" >#}
-    <div class="content gray-bg" style="width: 75%; height: 100%; float: left; padding-left: 1%; padding-right: 1%">
+    <div class="content gray-bg" style="width: 100%; height: 100%; float: left; padding-left: 210px; padding-right: 1%">
         <div class="row J_mainContent" id="content-main" style="height: 100%">
                 <iframe id="J_iframe" width="100%" height="100%" src="{{ url_for('cms.findex') }}" frameborder="0" data-id="index_v1.html" seamless></iframe>
         </div>
+    </div>
     </div>
     <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>

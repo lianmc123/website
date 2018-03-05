@@ -35,3 +35,17 @@ class ResetEmailForm(BaseForm):
         if not captcha_in_cache or captcha_in_cache.lower() != captcha.lower():
             raise ValidationError("验证码错误")
 
+
+class AddBannerForm(BaseForm):
+    name = StringField(validators=[InputRequired(message="名称不能为空")])
+    image_url = StringField(validators=[InputRequired(message="图片不能为空")])
+    link_url = StringField(validators=[InputRequired(message="跳转链接不能为空")])
+    priority = IntegerField(validators=[InputRequired(message="请输入优先级")])
+
+
+class UpdateBannerForm(BaseForm):
+    banner_id = IntegerField(validators=[InputRequired(message="未找到轮播图")])
+    name = StringField(validators=[InputRequired(message="名称不能为空")])
+    image_url = StringField(validators=[InputRequired(message="图片不能为空")])
+    link_url = StringField(validators=[InputRequired(message="跳转链接不能为空")])
+    priority = IntegerField(validators=[InputRequired(message="请输入优先级")])
