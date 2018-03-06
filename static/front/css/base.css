@@ -1,15 +1,15 @@
 /* Common styles for all menus */
 .main-container{
-	width: 990px;
+	width: 1150px;
 	margin: 20px auto;
 	overflow: hidden;
 }
 .lg-container{
-	width: 730px;
+	width: 840px;
 	float: left;
 }
 .sm-container{
-	width: 250px;
+	width: 300px;
 	float: right;
 }
 .menu {

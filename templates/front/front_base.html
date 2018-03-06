@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{% block title %}{% endblock %}</title>
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.css" rel="stylesheet">
@@ -15,15 +16,30 @@
 <nav class="menu menu--sebastian" style="background-color: #1c2b36; height: 72px">
     <img src="{{ static("common/images/logo2.jpeg") }}" alt="" style="height: 72px; float: left">
     <ul class="menu__list navbar-nav">
-        <li class="menu__item menu__item--current"><a href="#" class="menu__link">主页</a></li>
-        <li class="menu__item"><a href="#" class="menu__link">新闻</a></li>
+        <li class="menu__item menu__item--current" id="menu-index"><a href="/" class="menu__link">主页</a></li>
+        <li class="menu__item"><a href="#" class="menu__link" id="menu-news">新闻</a></li>
         {#        <li class="menu__item"><a href="#" class="menu__link">News</a></li>#}
         {#        <li class="menu__item"><a href="#" class="menu__link">Support</a></li>#}
         {#        <li class="menu__item"><a href="#" class="menu__link">Contact</a></li>#}
     </ul>
     <ul class=" navbar-nav navbar-right">
-        <li class="menu__item"><a class="menu__link" href="{{ url_for("front.signin") }}">登录</a></li>
-        <li class="menu__item"><a class="menu__link" href="{{ url_for("front.signup") }}">注册</a></li>
+        {% if g.front_user %}
+            <li class="dropdown menu__item " >
+                <a class="menu__link" type="button" style="color: #6ea9ff;" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{ g.front_user.username }}
+                     <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">个人中心</a></li>
+                    <li><a href="#">设置</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">退出登录</a></li>
+                </ul>
+            </li>
+        {% else %}
+            <li class="menu__item"><a class="menu__link" href="{{ url_for("front.signin") }}">登录</a></li>
+            <li class="menu__item"><a class="menu__link" href="{{ url_for("front.signup") }}">注册</a></li>
+        {% endif %}
     </ul>
 </nav>
 <div class="main-container">
@@ -33,6 +49,8 @@
 <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="{{ static("common/js/csrfajax.js") }}"></script>
+<script src="{{ static("common/js/sweetalert_pack.js") }}"></script>
 <script src="{{ static("front/js/base.js") }}"></script>
 {% block js %}
 

@@ -10,50 +10,63 @@
 
 {% block body %}
     <div class="lg-container">
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="height: 290px;width: 840px; overflow: hidden; border-radius: 10px">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-        </ol>
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel"
+             style="height: 290px;width: 840px; overflow: hidden; border-radius: 10px">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                {% for banner in banners %}
+                    {% if loop.first %}
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    {% else %}
+                        <li data-target="#carousel-example-generic" data-slide-to="{{ loop.index0 }}"></li>
+                    {% endif %}
+                {% endfor %}
 
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox" >
-            <div class="item active">
-                <a href="#"><img src="{{ static("common/images/b1.jpg") }}" alt="..."></a>
-                <div class="carousel-caption">
+            </ol>
 
-                </div>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                {% for banner in banners %}
+                    {% if loop.first %}
+                        <div class="item active">
+                            <a href="{{ banner.link_url }}"><img src="{{ banner.image_url }}"
+                                                                 alt="{{ banner.name }}"></a>
+                            <div class="carousel-caption">
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="item">
+                            <a href="{{ banner.link_url }}"><img src="{{ banner.image_url }}"
+                                                                 alt="{{ banner.name }}"></a>
+                            <div class="carousel-caption">
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
             </div>
-            <div class="item">
-                <a href="#"><img src="{{ static("common/images/b2.jpg") }}" alt="..."></a>
-                <div class="carousel-caption">
 
-                </div>
-            </div>
-            <div class="item">
-                <a href="#"><img src="{{ static("common/images/b3.jpg") }}" alt="..."></a>
-                <div class="carousel-caption">
-
-                </div>
-            </div>
-
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
     </div>
     <div class="sm-container">
-
+        <div style="margin-bottom: 20px">
+            <a href="{{ url_for("front.add_post") }}" class="btn btn-warning btn-block">发布帖子</a>
+        </div>
+        <div class="list-group">
+            <a href="#" class="list-group-item active">所有板块</a>
+            {% for board in boards %}
+                     <a href="#" class="list-group-item">{{ board.name }}</a>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 

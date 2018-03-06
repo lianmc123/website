@@ -4,9 +4,9 @@ $(function () {
         // console.log(event); // jQuery event
         // console.log(state); // true | false
         var self = $(this);
-        console.log(self)
+        console.log(self);
         var tr = self.parent().parent().parent().parent();
-        console.log(tr)
+        console.log(tr);
         var banner_id = tr.attr("data-id");
         csrfajax.post({
             'url': '/cms/sbanner/',
@@ -17,10 +17,12 @@ $(function () {
                 if (data['code'] == 200){
                     window.location.reload()
                 }else {
+                    $(this).parent().parent().attr('checked', false);
                     swalert.alertInfo(data['msg'])
                 }
             },
             'fail': function (error) {
+                $(this).parent().parent().attr('checked', false);
                 swalert.alertErrorToast("网络错误")
             }
         });
@@ -54,13 +56,13 @@ $(function () {
                 'banner_id': bannerId
             },
             'success': function (data) {
-
+                dialog.modal("hide");
                 if (data['code'] == 200) {
                     window.location.reload();
-                    dialog.find("input[name=name]").val("");
-                    dialog.find("input[name='image-url']").val("");
-                    dialog.find("input[name='link-url']").val("");
-                    dialog.find("input[name=priority]").val("");
+                    // dialog.find("input[name=name]").val("");
+                    // dialog.find("input[name='image-url']").val("");
+                    // dialog.find("input[name='link-url']").val("");
+                    // dialog.find("input[name=priority]").val("");
                 } else {
                     swalert.alertInfoToast(data['msg'])
                 }

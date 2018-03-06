@@ -1,0 +1,2 @@
+
+import apps.front.hooks

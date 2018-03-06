@@ -49,3 +49,12 @@ class UpdateBannerForm(BaseForm):
     image_url = StringField(validators=[InputRequired(message="图片不能为空")])
     link_url = StringField(validators=[InputRequired(message="跳转链接不能为空")])
     priority = IntegerField(validators=[InputRequired(message="请输入优先级")])
+
+
+class AddBoardForm(BaseForm):
+    name = StringField(validators=[InputRequired(message="请输入板块名称")])
+
+
+class UpdateBoardForm(BaseForm):
+    board_id = IntegerField(validators=[InputRequired(message="未找到板块")])
+    name = StringField(validators=[InputRequired(message="请输入板块名称")])

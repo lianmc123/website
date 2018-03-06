@@ -1,13 +1,73 @@
 {% extends "cms/cms_iframe_base.html" %}
+{% from "common/_macro.html" import static %}
 {% block css %}
-
+    <link href="https://cdn.bootcss.com/bootstrap-switch/4.0.0-alpha.1/css/bootstrap-switch.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
     <h1 style="color: #1c2b36">这是板块管理页</h1>
+    <div class="topbox">
+        <button class="btn btn-danger" style="float: right;margin-bottom: 15px" data-toggle="modal" id="add-board-btn"
+                data-target="#myModal">添加板块
+        </button>
+    </div>
+    <table class="table table-bordered text-center ">
+        <thead>
+        <colgroup>
+            <col width='80px'></col>
+            <col></col>
+            <col></col>
+            <col width='80px'></col>
+            <col width='120px'></col>
+          </colgroup>
+        <tr>
+            <th class="text-center">板块名称</th>
+            <th class="text-center">帖子数量</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">显示</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for board in boards %}
+            <tr data-id="{{ board.id }}" data-name="{{ board.name }}">
+                <td>{{ board.name }}</td>
+                <td>0</td>
+                <td>{{ board.create_time }}</td>
+                {% if board.is_show is eq(1) %}
+                    <td>
+                        {#                        <input type="checkbox"/>#}
+                        <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关" checked
+                               data-on-color="primary" data-off-color="danger">
+                    </td>
+                {% else %}
+                    <td>
+                        {#                        <input type="checkbox" checked/>#}
+                        <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关"
+                               data-on-color="primary" data-off-color="danger">
+                    </td>
+                {% endif %}
+                <td>
+                    <button class="btn btn-default btn-xs edit-btn">编辑</button>
+                    <button class="btn btn-danger btn-xs delete-btn">删除</button>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    {#    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">#}
+    {#  Launch demo modal#}
+    {#</button>#}
+
+
 {% endblock %}
 
 {% block js %}
-
+    <script src="https://cdn.bootcss.com/bootstrap-switch/4.0.0-alpha.1/js/bootstrap-switch.min.js"></script>
+    <script>
+        $("input[name=my-checkbox]").bootstrapSwitch();
+    </script>
+    <script src="{{ static("cms/js/boards.js") }}"></script>
 {% endblock %}

@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, views, request, redirect, url_for, session, g, jsonify
-from .forms import LoginForm, ResetPwdForm, ResetEmailForm, AddBannerForm, UpdateBannerForm
+from .forms import LoginForm, ResetPwdForm, ResetEmailForm, AddBannerForm, UpdateBannerForm, AddBoardForm, \
+    UpdateBoardForm
 from .models import CMSUser, CMSPermission
-from apps.common.models import BannerModel
+from apps.common.models import BannerModel, BoardModel
 from .decorators import login_required, permission_required
 import config
 from exts import db, mail
@@ -57,7 +58,78 @@ def comments():
 @login_required
 @permission_required(CMSPermission.BOARDER)
 def boards():
-    return render_template('cms/cms_boards.html')
+    board_models = BoardModel.query.all()
+    return render_template('cms/cms_boards.html', boards=board_models)
+
+
+@bp.route('/aboard/', methods=["POST"])
+@login_required
+@permission_required(CMSPermission.BOARDER)
+def aboard():
+    form = AddBoardForm(request.form)
+    if form.validate():
+        name = form.name.data
+        board = BoardModel(name=name)
+        db.session.add(board)
+        db.session.commit()
+        return restful.success()
+    else:
+        return restful.params_error(form.error_msg())
+
+
+@bp.route('/uboard/', methods=["POST"])
+@login_required
+@permission_required(CMSPermission.BOARDER)
+def uboard():
+    form = UpdateBoardForm(request.form)
+    if form.validate():
+        board_id = form.board_id.data
+        name = form.name.data
+        board = BoardModel.query.get(board_id)
+        if board:
+            board.name = name
+            db.session.commit()
+            return restful.success()
+        else:
+            return restful.params_error("未找到板块")
+    else:
+        return restful.params_error(form.error_msg())
+
+
+@bp.route('/sboard/', methods=["POST"])
+@login_required
+@permission_required(CMSPermission.BOARDER)
+def sboard():
+    board_id = request.form.get('board_id')
+    if not board_id:
+        return restful.params_error("Board_id不存在")
+    board = BoardModel.query.get(board_id)
+    if board:
+        board_show = board.is_show
+        if board_show == 0:
+            board.is_show = 1
+        else:
+            board.is_show = 0
+        db.session.commit()
+        return restful.success()
+    else:
+        restful.params_error("Board未找到")
+
+
+@bp.route('/dboard/', methods=['POST'])
+@login_required
+def dboard():
+    board_id = request.form.get('board_id')
+    if not board_id:
+        return restful.params_error("Board_id不存在")
+    board = BoardModel.query.get(board_id)
+    if board:
+        # db.session.delete(board)
+        # db.session.commit()
+        print("删除成功")
+        return restful.success()
+    else:
+        restful.params_error("Board未找到")
 
 
 @bp.route('/fusers/')
@@ -85,7 +157,7 @@ def croles():
 @login_required
 def banners():
     # http://www.htmleaf.com/jQuery/Buttons-Icons/201502051331.html  # bootstrap 开关
-    banners = BannerModel.query.all()
+    banners = BannerModel.query.order_by(BannerModel.priority.desc()).all()
     return render_template('cms/cms_banners.html', banners=banners)
 
 

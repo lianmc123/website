@@ -1,11 +1,11 @@
 from flask import Flask
 from flask_wtf import CSRFProtect
-from exts import db, mail, aliyunsms
+from exts import db, aliyunsms
 import config
 from apps.cms.views import bp as cms
 from apps.common.views import bp as common
 from apps.front.views import bp as front
-
+from apps.ueditor import bp as ueditor
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -15,6 +15,7 @@ CSRFProtect(app)
 app.register_blueprint(cms)
 app.register_blueprint(common)
 app.register_blueprint(front)
+app.register_blueprint(ueditor)
 
 # @app.route('/')
 # def hello_world():
