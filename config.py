@@ -60,3 +60,11 @@ UEDITOR_QINIU_SECRET_KEY = "7BKV7HeEKM3NDJk8_l_C89JI3SMmeUlAIatzl9d4"
 UEDITOR_QINIU_BUCKET_NAME = "hyvideo"
 UEDITOR_QINIU_DOMAIN = 'http://7xqenu.com1.z0.glb.clouddn.com'
 # ----------------- 分割线 ---------------------
+
+# -------------- flask-paginate ---------------
+PER_PAGE = 10
+# ----------------- 分割线 ---------------------
+# -------------- Celery ---------------
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# ----------------- 分割线 ---------------------

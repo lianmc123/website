@@ -73,5 +73,19 @@ def create_front_user(telephone, username, password):
     db.session.commit()
 
 
+@manager.command
+def create_test_post():
+    for x in range(1, 205):
+        title = '标题 %s' % x
+        content = '内容: %s' % x
+        board = common_models.BoardModel.query.first()
+        author = front_models.FrontUser.query.first()
+        post = common_models.PostModel(title=title,content=content)
+        post.board = board
+        post.author = author
+        db.session.add(post)
+        db.session.commit()
+    print('添加完成')
+
 if __name__ == '__main__':
     manager.run()

@@ -6,6 +6,7 @@ from utils import restful
 import random
 from .forms import SMSCaptchaForm
 from utils import web_cache
+from tasks import send_sms_captcha
 
 bp = Blueprint('common', __name__, url_prefix='/c')
 
@@ -16,12 +17,14 @@ def sms_captcha():
     if form.validate():
         telephone = form.telephone.data
         captcha = random.randint(100000, 999999)
-        result = aliyunsms.send_single(telephone, {"code": captcha})
-        if result:
-            web_cache.RedisCache().set(telephone, captcha)
-            return restful.success()
-        else:
-            return restful.params_error(msg="发送失败")
+        # result = aliyunsms.send_single(telephone, {"code": captcha})
+        # if result:
+        #     web_cache.RedisCache().set(telephone, captcha)
+        # else:
+        #     return restful.params_error(msg="发送失败")
+        send_sms_captcha(telephone, captcha)
+        web_cache.RedisCache().set(telephone, captcha)
+        return restful.success()
     else:
         return restful.params_error(msg="参数错误")
 

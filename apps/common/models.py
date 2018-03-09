@@ -20,6 +20,7 @@ class BoardModel(db.Model):
     is_show = db.Column(db.INTEGER, default=0)
     create_time = db.Column(db.DATETIME, default=datetime.now)
 
+
 class PostModel(db.Model):
     __tablename__ = "post"
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
@@ -27,6 +28,33 @@ class PostModel(db.Model):
     content = db.Column(db.Text, nullable=False)
     is_show = db.Column(db.INTEGER, default=1)
     create_time = db.Column(db.DATETIME, default=datetime.now)
-    board_id = db.Column(db.INTEGER, db.ForeignKey("board.id"))
+    board_id = db.Column(db.INTEGER, db.ForeignKey("board.id"), nullable=False)
+    author_id = db.Column(db.String(100), db.ForeignKey("front_user.uid"), nullable=False)
 
     board = db.relationship("BoardModel", backref="posts")
+    author = db.relationship("FrontUser", backref="posts")
+
+    __mapper_args__ = {
+        "order_by": create_time.desc()  # 使用标题排序
+    }
+
+
+class HighlightPostModel(db.Model):
+    __tablename__ = 'highlight_post'
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    post_id = db.Column(db.INTEGER, db.ForeignKey('post.id'), nullable=False)
+    create_time = db.Column(db.DATETIME, default=datetime.now)
+    post = db.relationship("PostModel", backref='highlight')
+
+
+class CommentModel(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.INTEGER, autoincrement=True, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    create_time = db.Column(db.DATETIME, default=datetime.now)
+    post_id = db.Column(db.INTEGER, db.ForeignKey('post.id'), nullable=False)
+    is_show = db.Column(db.INTEGER, default=1)
+    author_id = db.Column(db.String(100), db.ForeignKey('front_user.uid'), nullable=False)
+
+    post = db.relationship("PostModel", backref='comments')
+    author = db.relationship("FrontUser", backref='comments')

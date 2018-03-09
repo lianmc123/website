@@ -1,0 +1,138 @@
+{% extends "front/front_base.html" %}
+{% from "common/_macro.html" import static %}
+{% block title %}
+    添加文章
+{% endblock %}
+
+{% block css %}
+    <style>
+        .post-container {
+            border: 1px solid #e6e6e6;
+            padding: 10px;
+        }
+
+        .post-info-group {
+            font-size: 12px;
+            color: #8c8c8c;
+            border-bottom: 1px solid #e6e6e6;
+            width: 90%;
+            margin-bottom: 20px;
+        }
+
+        .post-info-group span {
+            margin-right: 20px;
+        }
+
+        .post-content img {
+            max-width: 100%;
+        }
+
+        .comment-group {
+            margin-top: 20px;
+            border: 1px solid #e8e8e8;
+            padding: 10px;
+        }
+
+        .add-comment-group {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .avatar-group {
+            float: left;
+        }
+
+        .avatar-group img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .comment-content {
+            float: left;
+            margin-left: 15px;
+            border-bottom: 1px solid #e6e6e6;
+            width: 90%;
+        }
+
+        .comment-list-group li {
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .comment-content .author-info{
+            font-size: 12px;
+            color: #8c8c8c;
+        }
+        .author-info span{
+            margin-right: 15px;
+        }
+
+        .comment-content .comment-text{
+            margin-top: 10px;
+
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="lg-container">
+        <div class="post-container">
+            <h2>{{ post.title }}</h2>
+            <div>
+                <p class="post-info-group">
+                    <span>发表时间:{{ post.create_time|handle_time }}</span>
+                    <span>作者:{{ post.author.username }}</span>
+                    <span>所属板块:{{ post.board.name }}</span>
+                    <span>阅读数:0</span>
+                    <span>评论数:0</span>
+                </p>
+            </div>
+            <div style="display: inline-block;">
+                <article class="post-content" id="post-content" data-id="{{ post.id }}">
+                    {{ post.content|safe }}
+                </article>
+            </div>
+        </div>
+        <div class="comment-group">
+            <h3>评论列表</h3>
+            <ul class="comment-list-group">
+                {% for comment in post.comments %}
+                    {% if comment.is_show==1 %}
+                        <li>
+                            <div class="avatar-group">
+                                <img src="{{ comment.author.avatar or url_for('static', filename="common/images/avatar.jpeg") }}"
+                                     alt="">
+                            </div>
+                            <div class="comment-content">
+                                <p class="author-info">
+                                    <span>{{ comment.author.username }}</span>
+                                    <span>{{ comment.create_time | handle_time }}</span>
+                                </p>
+                                <p class="comment-text">
+                                    {{ comment.content|safe }}
+                                </p>
+                            </div>
+
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="add-comment-group">
+            <h4>发表评论</h4>
+            <script id="container" name="content" type="text/plain"></script>
+            <div style="text-align: right; margin-top: 10px">
+                <button class="btn btn-primary" id="comment-btn">发表评论</button>
+            </div>
+        </div>
+    </div>
+    <div class="sm-container"></div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ static("ueditor/ueditor.config.js") }}"></script>
+    <script type="text/javascript" src="{{ static("ueditor/ueditor.all.min.js") }}"></script>
+    <script src="{{ static("front/js/pdetail.js") }}"></script>
+{% endblock %}

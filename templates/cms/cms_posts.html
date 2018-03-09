@@ -1,13 +1,73 @@
 {% extends "cms/cms_iframe_base.html" %}
 {% block css %}
-
+    <link href="https://cdn.bootcss.com/bootstrap-switch/4.0.0-alpha.1/css/bootstrap-switch.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
     <h1 style="color: #1c2b36">这是帖子管理页</h1>
+    <table class="table table-bordered">
+        <thead>
+        <colgroup>
+            <col width='300px'></col>
+            <col></col>
+            <col></col>
+            <col></col>
+            <col width='80px'></col>
+            <col width='120px'></col>
+          </colgroup>
+        <tr>
+            <th class="text-center">标题</th>
+            <th class="text-center">发布时间</th>
+            <th class="text-center">板块</th>
+            <th class="text-center">作者</th>
+            <th class="text-center">显示</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+            <tr data-id="{{ post.id }}" data-highlight="{{ 1 if post.highlight else 0 }}">
+                <td><a href="{{ url_for('front.post_detail',post_id=post.id) }}" target="_blank">{{ post.title }}</a></td>
+                <td>{{ post.create_time }}</td>
+                <td>{{ post.board.name }}</td>
+                <td>{{ post.author.username }}</td>
+                {% if post.is_show is eq(1) %}
+                    <td>
+                        {#                        <input type="checkbox"/>#}
+                        <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关" checked
+                               data-on-color="primary" data-off-color="danger">
+                    </td>
+                {% else %}
+                    <td>
+                        {#                        <input type="checkbox" checked/>#}
+                        <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关"
+                               data-on-color="primary" data-off-color="danger">
+                    </td>
+                {% endif %}
+                <td>
+                    {% if post.highlight %}
+                    <button class="btn btn-default btn-xs edit-btn">取消加精</button>
+                    {% else %}
+                    <button class="btn btn-default btn-xs edit-btn">加精</button>
+                    {% endif %}
+                    <button class="btn btn-danger btn-xs delete-btn">删除</button>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <div style="text-align: center">
+        {{ pagination.info }}
+            {{ pagination.links }}
+    </div>
 {% endblock %}
 
 {% block js %}
-
+    <script src="https://cdn.bootcss.com/bootstrap-switch/4.0.0-alpha.1/js/bootstrap-switch.min.js"></script>
+    <script>
+        $("input[name=my-checkbox]").bootstrapSwitch();
+    </script>
+    <script src="{{ static("cms/js/posts.js") }}"></script>
 {% endblock %}

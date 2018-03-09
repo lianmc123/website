@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, views, request, redirect, url_for,
 from .forms import LoginForm, ResetPwdForm, ResetEmailForm, AddBannerForm, UpdateBannerForm, AddBoardForm, \
     UpdateBoardForm
 from .models import CMSUser, CMSPermission
-from apps.common.models import BannerModel, BoardModel
+from apps.common.models import BannerModel, BoardModel, PostModel, HighlightPostModel
 from .decorators import login_required, permission_required
 import config
 from exts import db, mail
@@ -10,6 +10,8 @@ from utils import restful, web_cache
 from flask_mail import Message
 import string
 import random
+from flask_paginate import Pagination, get_page_parameter
+from tasks import send_mail
 
 # bp = Blueprint('cms', __name__, subdomain='cms')
 bp = Blueprint('cms', __name__, url_prefix='/cms')
@@ -44,7 +46,85 @@ def profile():
 @login_required
 @permission_required(CMSPermission.POSTER)
 def posts():
-    return render_template('cms/cms_posts.html')
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    start = (page - 1) * 30
+    end = start + 30
+    total = PostModel.query.count()
+    context = {
+        'posts': PostModel.query.slice(start, end),
+        'pagination': Pagination(bs_version=3, page=page, total=total, outer_window=0, per_page=30)
+    }
+    return render_template('cms/cms_posts.html', **context)
+
+
+@bp.route('/spost/', methods=["POST"])
+@login_required
+@permission_required(CMSPermission.POSTER)
+def spost():
+    post_id = request.form.get('post_id')
+    if not post_id:
+        return restful.params_error("Post_id不存在")
+    post = PostModel.query.get(post_id)
+    if post:
+        post_show = post.is_show
+        if post_show == 0:
+            post.is_show = 1
+        else:
+            post.is_show = 0
+        db.session.commit()
+        return restful.success()
+    else:
+        restful.params_error("Post未找到")
+
+
+@bp.route('/dpost/', methods=["POST"])
+@login_required
+@permission_required(CMSPermission.POSTER)
+def dpost():
+    post_id = request.form.get('post_id')
+    if not post_id:
+        return restful.params_error("Post_id不存在")
+    post = PostModel.query.get(post_id)
+    if post:
+        # db.session.delete(post)
+        # db.session.commit()
+        print('删除帖子成功')
+        return restful.success()
+    else:
+        restful.params_error("Post未找到")
+
+
+@bp.route('/hpost/', methods=["POST"])
+@login_required
+@permission_required(CMSPermission.POSTER)
+def hpost():
+    post_id = request.form.get("post_id")
+    if not post_id:
+        return restful.params_error("请传入帖子id")
+    post = PostModel.query.get(post_id)
+    if not post:
+        return restful.params_error("帖子不存在")
+    highlight = HighlightPostModel()
+    highlight.post = post
+    db.session.add(highlight)
+    db.session.commit()
+    return restful.success()
+
+
+@bp.route('/uhpost/', methods=["POST"])
+@login_required
+@permission_required(CMSPermission.POSTER)
+def uhpost():
+    post_id = request.form.get("post_id")
+    if not post_id:
+        return restful.params_error("请传入帖子id")
+    post = PostModel.query.get(post_id)
+    if not post:
+        return restful.params_error("帖子不存在")
+    highlight = HighlightPostModel.query.filter_by(post_id=post_id).first()
+    db.session.delete(highlight)
+    db.session.commit()
+    return restful.success()
 
 
 @bp.route('/comments/')
@@ -313,14 +393,16 @@ def email_captcha():
     source = list(string.ascii_letters)
     source.extend(map(lambda x: str(x), range(0, 10)))
     captcha = "".join(random.sample(source, 4))
-    message = Message(subject='验证码', recipients=[email],
-                      body="邮箱内容: %s(30分钟有效)" % captcha)
-    try:
-        mail.send(message)
-        # web_cache.Memcache().set(email, captcha)
-        web_cache.RedisCache().set(email, captcha)
-    except Exception as ex:
-        return restful.server_error("出错了")
+    # message = Message(subject='验证码', recipients=[email],
+    #                   body="邮箱内容: %s(30分钟有效)" % captcha)
+    # try:
+    #     # mail.send(message)
+    #     # web_cache.Memcache().set(email, captcha)
+    #     web_cache.RedisCache().set(email, captcha)
+    # except Exception as ex:
+    #     return restful.server_error("出错了")
+    send_mail.delay('验证码', [email], "邮箱内容: %s(30分钟有效)" % captcha)
+    web_cache.RedisCache().set(email, captcha)
     return restful.success()
 
 

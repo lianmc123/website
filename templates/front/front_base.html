@@ -24,6 +24,7 @@
     </ul>
     <ul class=" navbar-nav navbar-right">
         {% if g.front_user %}
+            <span id="login-tag" data-is-login="1" style="display: none"></span>
             <li class="dropdown menu__item " >
                 <a class="menu__link" type="button" style="color: #6ea9ff;" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     {{ g.front_user.username }}

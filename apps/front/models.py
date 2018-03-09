@@ -4,10 +4,12 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import enum
 
+
 class GenderEnum(enum.Enum):
     MALE = 1
     FEMALE = 2
     SECRET = 3
+
 
 class FrontUser(db.Model):
     __tablename__ = "front_user"
@@ -38,4 +40,3 @@ class FrontUser(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self._password, password)
-

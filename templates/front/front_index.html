@@ -56,15 +56,74 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
+        <div class="post-group">
+            <ul class="post-group-head">
+                {% if current_sort == 1 %}
+                    <li class="active"><a href="{{ url_for('front.index', st=1, bd=current_board_id) }}">最新</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('front.index', st=1, bd=current_board_id) }}">最新</a></li>
+                {% endif %}
+                {% if current_sort == 2%}
+                    <li class="active"><a href="{{ url_for('front.index', st=2, bd=current_board_id) }}">精华</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('front.index', st=2, bd=current_board_id) }}">精华</a></li>
+                {% endif %}
+                {% if current_sort == 3 %}
+                    <li class="active"><a href="{{ url_for('front.index', st=3, bd=current_board_id) }}">点赞数排序</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('front.index', st=3, bd=current_board_id) }}">点赞数排序</a></li>
+                {% endif %}
+                {% if current_sort == 4 %}
+                    <li class="active"><a href="{{ url_for('front.index', st=4, bd=current_board_id) }}">评论数排序</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('front.index', st=4, bd=current_board_id) }}">评论数排序</a></li>
+                {% endif %}
+            </ul>
+            <ul class="post-list-group">
+                {% for post in posts %}
+                    <li>
+                        <div class="author-avatar-group"><img
+                                src="{{ post.author.avatar or url_for('static', filename="common/images/avatar.jpeg") }}"
+                                alt=""></div>
+                        <div class="post-info-group">
+                            <p class="post-title"><a
+                                    href="{{ url_for("front.post_detail",post_id=post.id) }}">{{ post.title }}</a>
+                                {% if post.highlight %}
+                                    <span class="label label-danger">精华贴</span>
+                                {% endif %}
+                            </p>
+                            <p class="post-info">
+                                <span>作者:{{ post.author.username }}</span>
+                                <span>发布时间:{{ post.create_time | handle_time }}</span>
+                                <span>评论:0  </span>
+                                <span>阅读:0</span>
+                            </p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div style="text-align: center">
+                {{ pagination.links }}
+            </div>
+        </div>
     </div>
     <div class="sm-container">
         <div style="margin-bottom: 20px">
             <a href="{{ url_for("front.add_post") }}" class="btn btn-warning btn-block">发布帖子</a>
         </div>
         <div class="list-group">
-            <a href="#" class="list-group-item active">所有板块</a>
+            {% if current_board_id %}
+                <a href="/" class="list-group-item">所有板块</a>
+            {% else %}
+                <a href="/" class="list-group-item active">所有板块</a>
+            {% endif %}
             {% for board in boards %}
-                     <a href="#" class="list-group-item">{{ board.name }}</a>
+                {% if board.id == current_board_id %}
+                    <a href="{{ url_for("front.index", bd=board.id) }}"
+                       class="list-group-item active">{{ board.name }}</a>
+                {% else %}
+                    <a href="{{ url_for("front.index", bd=board.id) }}" class="list-group-item">{{ board.name }}</a>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
