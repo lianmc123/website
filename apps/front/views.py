@@ -1,4 +1,4 @@
-from flask import Blueprint, views, render_template, request, session, url_for, g, abort
+from flask import Blueprint, views, render_template, request, session, url_for, g, abort, redirect
 from .forms import SignupForm, SigninForm, AddPostForm, AddCommentForm
 from .models import FrontUser
 from apps.common.models import BannerModel, BoardModel, PostModel, CommentModel, HighlightPostModel
@@ -118,6 +118,12 @@ def add_post():
             return restful.params_error(form.error_msg())
 
 
+@bp.route('/logout/')
+def logout():
+    session.pop(config.FRONT_USER_ID)
+    return redirect(url_for('front.index'))
+
+
 class SignUpView(views.MethodView):
     def get(self):
         return_to = request.referrer
@@ -130,6 +136,9 @@ class SignUpView(views.MethodView):
         form = SignupForm(request.form)
         if form.validate():
             telephone = form.telephone.data
+            f_user_exist = FrontUser.query.filter_by(telephone=telephone).first()
+            if f_user_exist:
+                return restful.params_error("该手机已注册")
             password = form.password1.data
             username = form.username.data
             f_user = FrontUser(telephone=telephone, username=username, password=password)
@@ -155,7 +164,6 @@ class SignInView(views.MethodView):
             telephone = form.telephone.data
             password = form.password.data
             remember = form.remember.data
-            print(remember)
             user = FrontUser.query.filter_by(telephone=telephone).first()
             if user and user.check_password(password):
                 session[config.FRONT_USER_ID] = user.uid
